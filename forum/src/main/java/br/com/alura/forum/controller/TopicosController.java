@@ -1,14 +1,14 @@
 package br.com.alura.forum.controller;
 
 import br.com.alura.forum.dto.TopicoDTO;
+import br.com.alura.forum.form.TopicoForm;
+import br.com.alura.forum.repository.CursoRepository;
 import br.com.alura.forum.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import br.com.alura.forum.modelo.Topico;
 import br.com.alura.forum.modelo.Curso;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +20,9 @@ public class TopicosController {
 
     @Autowired
     private TopicoRepository topicoRepository;
+
+    @Autowired
+    private CursoRepository cursoRepository;
 
     @GetMapping
     public List<TopicoDTO> lista(String nomeCurso) {
@@ -37,5 +40,10 @@ public class TopicosController {
                 .stream()
                 .map(TopicoDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public void cadastra(@RequestBody TopicoForm topicoForm) {
+        this.topicoRepository.save(topicoForm.toTopico(this.cursoRepository));
     }
 }
