@@ -10,6 +10,8 @@ spring:
     defer-datasource-initialization: true
     hibernat:
       dll-auto: update
+    show-sql: true
+
 
   h2:
     console:
