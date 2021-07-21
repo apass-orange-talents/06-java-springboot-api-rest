@@ -1,5 +1,6 @@
 package br.com.alura.forum.dto;
 
+import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
 
 import java.time.LocalDateTime;
@@ -56,5 +57,9 @@ public class TopicoDTO {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public Topico toModel() {
+        return new Topico(this.getTitulo(), this.getMensagem(), new Curso("",""));
     }
 }
