@@ -1,4 +1,4 @@
-package br.com.alura.forum.form;
+package br.com.alura.forum.form.topico;
 
 import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-public class TopicoForm {
+public class CriaTopicoForm {
     @NotBlank @Length(min = 5)
     private String titulo;
 
