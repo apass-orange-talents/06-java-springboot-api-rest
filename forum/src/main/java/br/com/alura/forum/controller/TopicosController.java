@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,9 +37,7 @@ public class TopicosController {
     private CursoRepository cursoRepository;
 
     @GetMapping
-    public Page<TopicoDto> lista(String nomeCurso, @RequestParam Integer pg, @RequestParam Integer qtd, @RequestParam  String order) {
-
-        Pageable pageable = PageRequest.of(pg, qtd, Sort.Direction.ASC ,order);
+    public Page<TopicoDto> lista(String nomeCurso, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
         if(nomeCurso != null) {
             return this.topicoRepository
