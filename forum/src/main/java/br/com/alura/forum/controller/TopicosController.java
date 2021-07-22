@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class TopicosController {
     private CursoRepository cursoRepository;
 
     @GetMapping
+    @ResponseBody
     public List<TopicoDTO> lista(String nomeCurso) {
 
         if(nomeCurso != null) {
@@ -47,10 +49,14 @@ public class TopicosController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicoDTO> cadastra(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseBody
+    public TopicoDTO cadastra(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
         var topico = this.topicoRepository.save(topicoForm.toTopico(this.cursoRepository));
-        return ResponseEntity.created(uriBuilder.path("/topicos/{id}")
-                .buildAndExpand(topico.getId()).toUri())
-                .body(new TopicoDTO(topico));
+//        return ResponseEntity.created(uriBuilder.path("/topicos/{id}")
+//                .buildAndExpand(topico.getId()).toUri())
+//                .body(new TopicoDTO(topico));
+
+        return new TopicoDTO(topico);
     }
 }
