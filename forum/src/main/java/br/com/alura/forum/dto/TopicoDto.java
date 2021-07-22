@@ -5,26 +5,17 @@ import br.com.alura.forum.modelo.Topico;
 
 import java.time.LocalDateTime;
 
-public class TopicoDTO {
+public class TopicoDto {
     private Long id;
     private String titulo;
     private String mensagem;
-
     private LocalDateTime dataCriacao;
 
-    TopicoDTO() {
-
-    }
-
-    public TopicoDTO(Long id, String titulo, String mensagem, LocalDateTime dataCriacao) {
-        this.id = id;
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.dataCriacao = dataCriacao;
-    }
-
-    public TopicoDTO(Topico topico) {
-        this(topico.getId(), topico.getTitulo(), topico.getMensagem(), topico.getDataCriacao());
+    public TopicoDto(Topico topico) {
+        this.id = topico.getId();
+        this.titulo = topico.getTitulo();
+        this.mensagem = topico.getMensagem();
+        this.dataCriacao = topico.getDataCriacao();
     }
 
     public Long getId() {
