@@ -8,6 +8,10 @@ import br.com.alura.forum.repository.CursoRepository;
 import br.com.alura.forum.repository.TopicoRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,21 +36,19 @@ public class TopicosController {
     private CursoRepository cursoRepository;
 
     @GetMapping
-    public List<TopicoDto> lista(String nomeCurso) {
+    public Page<TopicoDto> lista(String nomeCurso, @RequestParam Integer pg, @RequestParam Integer qtd, @RequestParam  String order) {
+
+        Pageable pageable = PageRequest.of(pg, qtd, Sort.Direction.ASC ,order);
 
         if(nomeCurso != null) {
             return this.topicoRepository
-                    .findByCursoNome(nomeCurso)
-                    .stream()
-                    .map(TopicoDto::new)
-                    .collect(Collectors.toList());
+                    .findByCursoNome(nomeCurso, pageable)
+                    .map(TopicoDto::new);
         }
 
         return this.topicoRepository
-                .findAll()
-                .stream()
-                .map(TopicoDto::new)
-                .collect(Collectors.toList());
+                .findAll(pageable)
+                .map(TopicoDto::new);
     }
 
     @GetMapping("/{id}")
