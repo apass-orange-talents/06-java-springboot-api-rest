@@ -8,6 +8,8 @@ import br.com.alura.forum.repository.CursoRepository;
 import br.com.alura.forum.repository.TopicoRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +39,8 @@ public class TopicosController {
     private CursoRepository cursoRepository;
 
     @GetMapping
-    public Page<TopicoDto> lista(String nomeCurso, @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    @Cacheable(value = "listaDeTopicos")
+    public Page<TopicoDto> lista(String nomeCurso, @PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
         if(nomeCurso != null) {
             return this.topicoRepository
@@ -64,6 +67,7 @@ public class TopicosController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Transactional
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> cadastra(@RequestBody @Valid CriaTopicoForm criaTopicoForm, UriComponentsBuilder uriBuilder) {
         var topico = this.topicoRepository.save(criaTopicoForm.toTopico(this.cursoRepository));
         return ResponseEntity.created(uriBuilder.path("/topicos/{id}")
@@ -73,6 +77,7 @@ public class TopicosController {
 
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> atualiza(@PathVariable Long id, @RequestBody @Valid AtualizaTopicoForm atualizaTopicoForm) {
 
         var optionalTopico = this.topicoRepository.findById(id);
@@ -82,8 +87,10 @@ public class TopicosController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+
     @Transactional
+    @DeleteMapping("/{id}")
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<?> deleta(@PathVariable  Long id) {
         var optionalTopico = this.topicoRepository.findById(id);
         if(optionalTopico.isEmpty())
