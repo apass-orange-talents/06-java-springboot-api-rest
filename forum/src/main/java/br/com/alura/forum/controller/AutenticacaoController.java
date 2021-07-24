@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/auth")
-@Profile("prod")
+@Profile({"prod", "test"})
 public class AutenticacaoController {
 
     @Autowired

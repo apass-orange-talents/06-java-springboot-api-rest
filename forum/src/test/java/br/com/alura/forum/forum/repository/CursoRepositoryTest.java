@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ActiveProfiles("test")
@@ -36,7 +38,7 @@ public class CursoRepositoryTest {
 
         Curso cursoRestaurado = cursoRepository.findByNome(nomeCurso);
         Assert.assertNotNull(cursoRestaurado);
-        Assert.assertEquals(nomeCurso, cursoRestaurado.getNome());
+        assertEquals(nomeCurso, cursoRestaurado.getNome());
     }
 
     @Test
