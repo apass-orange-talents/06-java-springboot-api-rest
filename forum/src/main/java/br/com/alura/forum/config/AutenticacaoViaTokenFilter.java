@@ -39,13 +39,14 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
                         .setAuthentication(new UsernamePasswordAuthenticationToken(
                                 usuario.getUsername(), null, usuario.getAuthorities()));
 
-                filterChain.doFilter(request, response);
 
             } catch (JwtException jwtException) {
                 ((HttpServletResponse) response).sendError(HttpStatus.BAD_REQUEST.value(), "Token inválido!");
+                return;
             }
         }
 
+        filterChain.doFilter(request, response);
     }
 
     private String recuperaToken(HttpServletRequest request) {
